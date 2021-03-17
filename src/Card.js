@@ -1,4 +1,5 @@
 import { css, html, LitElement } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 
 export class Card extends LitElement {
   static get styles() {
@@ -12,7 +13,6 @@ export class Card extends LitElement {
         padding: 2em;
         width: 200px;
       }
-
       :host(:hover) {
         z-index: 2;
         box-shadow: inset 0 0 10px whitesmoke,
@@ -25,36 +25,32 @@ export class Card extends LitElement {
         10px 0 80px #0ff;
         border-radius: 30px;
       }
-
-      #unknown-value {
-        font-size: 10em;
-      }
-
       :host(:hover) #unknown-value {
         display: none;
       }
-
-      #options {
-        display: none;
-      }
-
       :host(:hover) #options {
         display: flex;
         justify-content: center;
         align-items: center;
       }
-
+      #unknown-value {
+        font-size: 10em;
+      }
+      #options {
+        display: none;
+      }
+      .hide {
+        display: none;
+      }
       ul {
         display: flex;
         flex-direction: column;
         padding: 0;
       }
-
       ul li {
         list-style: none;
         margin: 0 15px;
       }
-
       ul li a {
         position: relative;
         display: block;
@@ -70,7 +66,6 @@ export class Card extends LitElement {
         text-decoration: none;
         margin: 5px;
       }
-
       ul li a:before {
         content: '';
         position: absolute;
@@ -80,19 +75,35 @@ export class Card extends LitElement {
         transform: scale(.9);
         z-index: -1;
       }
-
       ul li a:hover:before {
         transform: scale(1.2);
         box-shadow: 0 0 15px #d30086;
         filter: blur(3px);
       }
-
       ul li a:hover {
         color: #e266ad;
         box-shadow: 0 0 15px #d02b97;
         text-shadow: 0 0 15px #d30086;
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      isPlayed: {
+        type: Boolean
+      },
+      choice: {
+        type: String
+      },
+    }
+  }
+
+  constructor() {
+    super();
+    this.isPlayed = false;
+    this.choice = '👾';
+    this.valueClass = { hide: !this.isPlayed };
   }
 
   render() {
@@ -118,6 +129,9 @@ export class Card extends LitElement {
               </a>
           </li>
         </ul>
+      </div>
+      <div id="value" class='${classMap(this.valueClass)}'>
+        ${this.choice}
       </div>
       <slot></slot>
     `;
