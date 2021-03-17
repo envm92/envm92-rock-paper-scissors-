@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit-html';
+    import '../envm92-rock-paper-scissors.js';
+
+    const title = 'Hello owc World!';
+    render(
+      html`
+        <envm92-rock-paper-scissors .title=${title}>
+          some more light-dom
+        </envm92-rock-paper-scissors>
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
+</body>
+</html>
