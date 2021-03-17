@@ -1,1 +1,1 @@
-export { Envm92RockPaperScissors } from './src/Envm92RockPaperScissors.js';
+export { RockPaperScissors } from './src/RockPaperScissors.js';
