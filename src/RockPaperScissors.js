@@ -24,14 +24,38 @@ export class RockPaperScissors extends LitElement {
     `;
   }
 
+  static get properties() {
+    return {
+      namePlayer: {
+        type: String,
+        reflect: true,
+        attribute: 'name-player',
+        converter: (value, type) => {
+          if (type === String) {
+            let name = value;
+            name = name.toUpperCase();
+            name = name.substr(0, 6);
+            return name;
+          }
+          return 'PLAYER';
+        }
+      },
+    };
+  }
+
+  constructor() {
+    super();
+    this.namePlayer = '';
+  }
+
   render() {
     return html`
       <div id="welcome-message">
         <h2>Let's play Rock Paper Scissors!</h2>
       </div>
       <div id="board">
-        <card-rock-paper-scissors>
-          Player
+        <card-rock-paper-scissors symbol=''>
+          ${this.namePlayer}
         </card-rock-paper-scissors>
         <npc-card-rock-paper-scissors>
           NPC

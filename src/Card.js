@@ -133,7 +133,9 @@ export class Card extends LitElement {
       <div id="value" class='${classMap(this.valueClass)}'>
         ${this.choice}
       </div>
-      <slot></slot>
+      <slot>
+        Player
+      </slot>
     `;
   }
 }
