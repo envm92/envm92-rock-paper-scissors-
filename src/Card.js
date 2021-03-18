@@ -13,7 +13,19 @@ export class Card extends LitElement {
         padding: 2em;
         width: 200px;
       }
-      :host(:hover) {
+      :host([winner=true]){
+        box-shadow: inset 0 0 10px whitesmoke,
+        inset 20px 0 80px #f0f,
+          inset -20px 0 80px #0ff,
+        inset 20px 0 300px #f0f,
+          inset -20px 0 300px #0ff,
+        0 0 50px #fff,
+        -10px 0 80px #f0f,
+        10px 0 80px #0ff;
+        border-radius: 30px;
+        cursor: pointer;
+      }
+      :host(:hover)[winner=false] {
         z-index: 2;
         box-shadow: inset 0 0 10px whitesmoke,
         inset 20px 0 80px #f0f,
@@ -24,6 +36,7 @@ export class Card extends LitElement {
         -10px 0 80px #f0f,
         10px 0 80px #0ff;
         border-radius: 30px;
+        cursor: pointer;
       }
       :host(:hover) #unknown-value {
         display: none;
@@ -33,8 +46,14 @@ export class Card extends LitElement {
         justify-content: center;
         align-items: center;
       }
-      #unknown-value {
+      :host(:hover) #options.hide {
+        display: none;
+      }
+      #unknown-value, #value {
         font-size: 10em;
+      }
+      #value {
+        cursor: not-allowed;
       }
       #options {
         display: none;
@@ -51,7 +70,7 @@ export class Card extends LitElement {
         list-style: none;
         margin: 0 15px;
       }
-      ul li a {
+      ul li button {
         position: relative;
         display: block;
         width: 50px;
@@ -66,7 +85,7 @@ export class Card extends LitElement {
         text-decoration: none;
         margin: 5px;
       }
-      ul li a:before {
+      ul li button:before {
         content: '';
         position: absolute;
         border-radius: 50%;
@@ -75,12 +94,12 @@ export class Card extends LitElement {
         transform: scale(.9);
         z-index: -1;
       }
-      ul li a:hover:before {
+      ul li button:hover:before {
         transform: scale(1.2);
         box-shadow: 0 0 15px #d30086;
         filter: blur(3px);
       }
-      ul li a:hover {
+      ul li button:hover {
         color: #e266ad;
         box-shadow: 0 0 15px #d02b97;
         text-shadow: 0 0 15px #d30086;
@@ -96,7 +115,22 @@ export class Card extends LitElement {
       choice: {
         type: String
       },
+      choices: {
+        type: Array
+      },
+      winner: {
+
+        type: String,
+        reflect: true
+      }
     }
+  }
+
+  __onClick(symbol) {
+    this.isPlayed = true;
+    this.valueClass = { hide: !this.isPlayed };
+    this.choiceClass = { hide: this.isPlayed };
+    this.choice = symbol;
   }
 
   constructor() {
@@ -104,30 +138,39 @@ export class Card extends LitElement {
     this.isPlayed = false;
     this.choice = '👾';
     this.valueClass = { hide: !this.isPlayed };
+    this.choiceClass = { hide: this.isPlayed };
+    this.choices = ['✊', '🖐', '✌️'];
+  }
+
+  updated(_changedProperties) {
+    super.updated(_changedProperties);
+    console.log(_changedProperties, this);
+    if (_changedProperties.has('isPlayed') && this.isPlayed) {
+      const playEvent = new CustomEvent('choice-selected', {
+        detail: {
+          choice: this.choice
+        }
+      });
+      this.dispatchEvent(playEvent);
+    }
   }
 
   render() {
     return html`
-      <div id="unknown-value">
+      <div id="unknown-value" class='${classMap(this.choiceClass)}'>
         ❔
       </div>
-      <div id="options">
+      <div id="options" class='${classMap(this.choiceClass)}'>
         <ul>
-          <li>
-              <a href="#">
-                ✊️
-              </a>
-          </li>
-          <li>
-              <a href="#">
-                🖐
-              </a>
-          </li>
-          <li>
-              <a href="#">
-                ✌️
-              </a>
-          </li>
+          ${this.choices.map((choice) => {
+            return html`
+              <li>
+                <button @click="${() => {this.__onClick(choice)}}">
+                  ${choice}
+                </button>
+              </li>
+            `;
+          })}
         </ul>
       </div>
       <div id="value" class='${classMap(this.valueClass)}'>
