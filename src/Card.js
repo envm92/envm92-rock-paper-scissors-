@@ -144,7 +144,6 @@ export class Card extends LitElement {
 
   updated(_changedProperties) {
     super.updated(_changedProperties);
-    console.log(_changedProperties, this);
     if (_changedProperties.has('isPlayed') && this.isPlayed) {
       const playEvent = new CustomEvent('choice-selected', {
         detail: {

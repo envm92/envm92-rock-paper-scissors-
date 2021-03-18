@@ -31,14 +31,11 @@ export class RockPaperScissors extends LitElement {
         type: String,
         reflect: true,
         attribute: 'name-player',
-        converter: (value, type) => {
-          if (type === String) {
-            let name = value;
-            name = name.toUpperCase();
-            name = name.substr(0, 6);
-            return name;
-          }
-          return 'PLAYER';
+        converter: (value) => {
+          let name = value;
+          name = name.toUpperCase();
+          name = name.substr(0, 6);
+          return name;
         }
       },
       playerChoice: {
