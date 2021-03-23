@@ -1,7 +1,6 @@
 import { css, html, LitElement } from 'lit-element';
 
 export class RockPaperScissors extends LitElement {
-
   static get styles() {
     return css`
       :host {
@@ -22,6 +21,13 @@ export class RockPaperScissors extends LitElement {
         flex-direction: row;
         justify-content: space-evenly;
       }
+
+      @media all and (max-width: 768px) {
+        #board {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
     `;
   }
 
@@ -31,31 +37,23 @@ export class RockPaperScissors extends LitElement {
         type: String,
         reflect: true,
         attribute: 'name-player',
-        converter: (value) => {
+        converter: value => {
           let name = value;
           name = name.toUpperCase();
           name = name.substr(0, 6);
           return name;
-        }
+        },
       },
-      playerChoice: {
-        type: String
-      },
-      npcChoice: {
-        type: String
-      },
-      winner: {
-        type: String
-      },
-      message: {
-        type: String
-      }
+      playerChoice: String,
+      npcChoice: String,
+      winner: String,
+      message: String,
     };
   }
 
   constructor() {
     super();
-    this.message = 'Let\'s play Rock Paper Scissors!';
+    this.message = "Let's play Rock Paper Scissors!";
     this.namePlayer = '';
     this.playerChoice = '';
     this.npcChoice = '';
@@ -91,8 +89,9 @@ export class RockPaperScissors extends LitElement {
   updated(_changedProperties) {
     super.updated(_changedProperties);
     if (
-      _changedProperties.has('npcChoice') && _changedProperties.has('playerChoice')
-      && this.npcChoice !== ''
+      _changedProperties.has('npcChoice') &&
+      _changedProperties.has('playerChoice') &&
+      this.npcChoice !== ''
     ) {
       this.__whoWon();
     }
@@ -100,16 +99,21 @@ export class RockPaperScissors extends LitElement {
 
   render() {
     return html`
-      <div id='welcome-message'>
+      <div id="welcome-message">
         <h2>${this.message}</h2>
       </div>
-      <div id='board'>
-        <card-rock-paper-scissors @choice-selected='${this.__playerSelect}'
-                                  .winner="${this.winner !== '' && this.winner === 'player'}">
+      <div id="board">
+        <card-rock-paper-scissors
+          @choice-selected="${this.__playerSelect}"
+          .winner="${this.winner !== '' && this.winner === 'player'}"
+        >
           ${this.namePlayer}
         </card-rock-paper-scissors>
-        <npc-card-rock-paper-scissors id='npc-card' @choice-selected='${this.__npcSelect}'
-                                      .winner="${this.winner !== '' && this.winner === 'npc'}">
+        <npc-card-rock-paper-scissors
+          id="npc-card"
+          @choice-selected="${this.__npcSelect}"
+          .winner="${this.winner !== '' && this.winner === 'npc'}"
+        >
           NPC
         </npc-card-rock-paper-scissors>
       </div>

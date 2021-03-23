@@ -22,13 +22,15 @@ export class NpcCard extends Card {
         :host(:hover) #unknown-value.hide {
           display: none;
         }
-      `
+      `,
     ];
   }
 
   _play() {
-    const random = Math.floor(Math.random() * (Math.floor(2) - Math.ceil(0) + 1)) + Math.ceil(0)
-    this.__onClick(this.choices[random]);
+    const random =
+      Math.floor(Math.random() * (Math.floor(2) - Math.ceil(0) + 1)) +
+      Math.ceil(0);
+    this.__onClick({ target: { value: this.choices[random] } });
   }
 
   firstUpdated() {
@@ -37,12 +39,8 @@ export class NpcCard extends Card {
 
   render() {
     return html`
-      <div id="unknown-value" class='${classMap(this.choiceClass)}'>
-        ❔
-      </div>
-      <div id="value" class='${classMap(this.valueClass)}'>
-        ${this.choice}
-      </div>
+      <div id="unknown-value" class="${classMap(this.choiceClass)}">❔</div>
+      <div id="value" class="${classMap(this.valueClass)}">${this.choice}</div>
       <slot></slot>
     `;
   }
